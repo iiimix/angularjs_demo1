@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>angualr 依赖注入</title>
+
+</head>
+<script>
+	var $ = $||{};
+	$ng = {$scope:{name:"$scope",fatherScope:{},hasChild:true,childCount:8},
+			$http:{name:"$http",get:$.get,post:$.post,success:{},error:{}},
+			$location:{name: "$location",href:"http://mix.com",reload:""}
+			};
+	function controller($http, $location){
+		for(var i =0; i< arguments.length; i++){
+			var _this = arguments[i];
+			for(var j in _this){
+				console.log(_this.name+ " : " +_this);
+				//console.log(j+"："+ _this[j]);
+			}
+		}
+	}
+
+	//console.log("abc(e)fe".match(/\(.*\)/));
+	var argStr = controller.toString().match(/\(.*\)/)[0];
+	// console.log(argArr);
+	argArr = argStr.substring(1, argStr.length - 1).split(",");
+	console.log(argArr);
+	var callArgsArray = [];
+	for(var i = 0; i < argArr.length; i++){
+		// callArgsArray.push($ng[argArr[i].replace(/^\s*|\s*$/g, "")]);
+		callArgsArray[i] = $ng[argArr[i].replace(/^\s*|\s*$/g, "")];
+	}
+	// var str = "  abc  ".replace(/^\s*|\s*$/g, "");
+	// console.log("1"+str+"1");
+	console.log(callArgsArray);
+	// call和apply的区别
+	controller.apply(null, callArgsArray);
+
+
+
+
+
+</script>
+<body>
+    
+</body>
+</html>

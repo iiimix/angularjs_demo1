@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Examples</title>
+
+<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body ng-app="watchTest">
+	<div class="container" ng-controller="index">
+		<button class="btn btn-primary">发送短信</button>
+		<input type="text" ng-model="inputText">
+		<p class="text text-info">改变次数{{count}}</p>
+		<p class="text text-info" ng-bind="message">
+		</p>
+	
+		<button class="btn btn-primary {{ seconds!=='发送短信'?'disabled':''}}" ng-click="time? '':send()" ng-bind="seconds">发送短信</button>
+
+		
+	</div>
+
+<script src="js/angular.js"></script>
+<script>
+/********************************************************************************
+ 
+ $watch 监听作用域中属性值得变化
+ */
+
+angular.module('watchTest', [])
+	.controller('index', function($scope, $interval){
+		$scope.count = 0;
+
+		// $watch(name, fn(newVal,oldValue), isDeepWatch)
+		$scope.$watch("inputText", function(newVal , oldValue){
+			$scope.count ++;
+			if($scope.count > 10){
+				$scope.message = "改变次数大于10次了";
+			}
+		});
+
+		$scope.seconds = "发送短信";
+		$scope.send = function(){
+			console.log("33333333333");
+			$scope.timeCount = 60;
+			$scope.seconds = "60s";
+
+			$scope.time = $interval(function(){
+				$scope.timeCount --;
+				if($scope.timeCount < 0){
+					$interval.cancel($scope.time);
+					// Promise 对象
+					console.log($scope.time);
+					$scope.seconds = "发送短信";
+				}else {
+					$scope.seconds = $scope.timeCount + "s";
+				}
+			}, 1000);
+		}
+
+	});
+
+ </script>
+</body>
+</html>

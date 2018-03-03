@@ -1,0 +1,15 @@
+
+  <div class="panel panel-default">
+    <div class="panel-heading" ng-click="toggleActive()" >
+      <h4 class="panel-title">
+        <a role="button" ng-bind="heading">
+          
+        </a>
+      </h4>
+    </div>
+    <div class="panel-collapse collapse" ng-class="{in: active}">
+      <div class="panel-body" ng-transclude>
+        
+      </div>
+    </div>
+  </div>

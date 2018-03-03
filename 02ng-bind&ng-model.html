@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Angular 数据绑定</title>
+
+<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body ng-app="test">
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8" ng-controller="FatherController">
+			<p>
+					FatherController绑定了content属性
+				</p>
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="content">
+				<span class="input-group-addon">{{message}}</span>
+				
+			</div>
+			<br>
+			<form action="#" class="" ng-controller="SubContrller">
+				<div class="form-group">
+					<input type="text" class="form-control" ng-model="message">
+				</div>
+				<button class="btn btn-primary">{{message}}</button>
+				<p>SubController没有绑定content属性</p>
+				<button class="btn btn-primary">{{content}}</button>
+			</form>
+
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="inputMessage">
+				<span class="input-group-addon" ng-bind="inputMessage"></span>
+				
+				<input type="text" class="form-control" ng-bind="spanText">
+				<span class="input-group-addon" id="spanText" ng-model="spanText">span文字</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src='js/angular.min.js'></script>
+<script>
+    
+/********************************************************************************
+ *	ng-model数据双向绑定
+ 子控制器可以继承父控制器的属性
+
+ ng-bind绑定数据展示$scope-->view
+ 
+ ng-bind相当于{{}}表达式，首次加载页面时，先显示{{name}},当angular加载完成
+ 渲染成功后才显示绑定值，ng-bind则不会出现中间显示值
+
+ ng-model只能用于表单输入元素
+
+ ********************************************************************************/
+
+ angular.module("test",[])
+ 	.controller("SubContrller", function($scope){
+
+ 	})
+ 	.controller("FatherController", function($scope){
+
+ 	})
+;
+
+window.onload = function(){
+	//console.log(document.getElementById("spanText").innerHTML = "修改问题");
+
+	document.querySelector("#spanText").innerHTML = "修改文字";
+};
+</script>
+</body>
+</html>

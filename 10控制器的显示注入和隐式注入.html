@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>控制器的显示注入和隐式注入</title>
+
+<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body ng-app="test">
+<nav ng-controller="firstController">
+	
+</nav>
+
+<div class="container" ng-controller="secondController">
+	
+</div>
+
+<script src='js/angular.js'></script>
+<script>
+	var app = angular.module('test', []);
+
+	// 隐式注入服务
+	app.controller('firstController', function($scope, $window){
+		console.log($scope);
+		console.log($window);
+	})
+
+
+	// 显示注入服务
+	app.controller('secondController', ['$scope','$window', function(a, b){
+		console.log(a);
+		console.log(b);
+	}])
+
+	// 利用$inject属性注入
+	function OtherController(a, b){
+		console.log(a);
+		console.log(b);
+	}
+
+	OtherController.$inject = ['$scope', '$document'];
+
+	/**************************************************
+	1.隐式注入参数名必须是angular提供的名称
+
+
+	2.显示注入第二个参数是数组构成，数组元素顺序决定参数顺序
+	显示注入有利于代码压缩不破坏本身功能
+
+	*******************************/
+
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html language="zh">
+<head>
+<title>11自定义指令</title>
+
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body ng-app="home">
+<div class="container">
+	<div class="row" style="margin-bottom:30px">
+		
+	</div>
+	<div class="row" ng-controller="tableController">
+		<div class="col-md-8">
+			<accordion-group>
+				<accordion-panel ng-repeat="item in listData" heading="{{item.title}}">
+					{{item.content}}
+				</accordion-panel>
+			</accordion-group>
+		</div>
+	</div>
+		
+
+</div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src='js/angular.js'></script>
+<script>
+	angular.module("home", [])
+		.factory('ListData',function(){
+			return [{
+				title : "标题一",
+				content : "内容一"
+			},{
+				title : "标题二",
+				content : "内容二"
+			},{
+				title : "标题三",
+				content : "内容三"
+			}];
+		})
+		.controller("tableController", ['$scope','ListData', function($scope, ListData){
+			$scope.listData = ListData;
+		}])
+		.directive('accordionGroup', function(){
+			return {
+				restrict : 'E',
+				replace : true,
+				template : '<div class="panel-group" ng-transclude></div>',
+				transclude : true,
+				controller: function(){
+					this.statusList = [];
+					this.toggleOther = function(activeScope){
+						angular.forEach(this.statusList, function(scope){
+							//console.log(list+" "+heading);
+							if(scope !== activeScope){
+								scope.active = false;
+							}
+						})
+					}
+				},
+				controllerAs : 'accordionGroupController'
+			}
+		})
+		.directive('accordionPanel', function(){
+
+			/************************************
+			restrict : 'ECMA'
+			scope :   @取自定义指令上的属性值，只能是基本数据类型
+					  = 与父作用域数据双向绑定
+					  & 把父作用域的属性包装成一个函数，属性值可以是任意类型
+			replace：true:替换原自定义标签
+			transclude : true: 把原标签内容，添加到模板template中，模板中需要ng-transclude属性
+			priority: 数字 优先级，执行先后顺序，大到小
+			terminal: true; 定义比当前优先级更低的就不执行了
+			require : 其他指令名称，
+			compile : 
+			link : 事件初始化函数
+			controller: 作用域函数
+			controllerAs : 'thisController'取别名，供其他指令引用注入
+ 
+			***********************************/
+
+			return {
+				restrict : 'E',
+				replace : true,
+				scope : {
+					heading : "@heading"
+				},
+				require : "^accordionGroup",
+				templateUrl : 'accordionPanelTemplate.html',
+				link : function(scope, element, attrs, accordionGroupController){
+					console.log(scope.heading);
+					scope.active = false;
+					accordionGroupController.statusList.push(scope);
+
+					scope.toggleActive = function(){
+						scope.active = !scope.active;
+						accordionGroupController.toggleOther(scope);
+					}
+				},
+				transclude:true
+			}
+		})
+</script>
+</body>
+</html>

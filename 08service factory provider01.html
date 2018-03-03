@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>$provide</title>
+<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body ng-app="myApp">
+<div class="container" ng-controller="FirstController">
+	<div class="row" ng-controller="FirstController">
+		
+	</div>
+	<div class="row" ng-controller="SecondController">
+		
+	</div>
+</div>
+
+<script src="js/angular.js"></script>
+<script>
+	var app = angular.module("myApp",[]);
+	app.service('CustomService1', function(){
+		return {
+			name: "MichaelWade"
+		}
+	});
+	app.service('CustomService2', function(){
+		this.name = "iiimix";
+	});
+
+	app.service('CustomService3', function(){
+		this.name = "iiimox3";
+		this.dexCode = function(x){
+			return x.toString(16);
+		}
+	});
+
+	/*********************
+	service factory 都不能注入$scope,
+	*/
+	app.factory('CustomeFactory1', function(CustomService3){
+		var person = {};
+		person.name = CustomService3.name;
+		var money;
+		person.walk = function(){
+			console.log(name+" is walking....");
+		}
+
+		person.setMoney = function(mon){
+			money = mon;
+		}
+		person.getMoney = function(){
+			return money;
+		}
+		return person;
+	});
+
+	app.controller('FirstController', function($scope, CustomService1, CustomService2, CustomService3, CustomeFactory1){
+		console.log(CustomService1);  // {name:'MichaelWade'}
+		console.log(CustomService2);  // {name: 'iiimix'}
+		console.log(CustomService3.dexCode(255));  // ff  number.toString(n)转换成n进制数字表示的字符串
+		CustomService3.name = "firstController里面修改了CustromService3的name";
+	});
+
+	app.controller('SecondController', function($scope, CustomeFactory1,CustomService3){
+		CustomeFactory1.walk();
+		CustomeFactory1.setMoney(10000);
+		console.log(CustomeFactory1.getMoney());
+		console.log(CustomeFactory1);
+		console.log(CustomService3);
+	});
+
+	/**************************************************
+	相同点：
+	1.service factory里面都不可以注入$scope
+	2.factory里面可以注入service、constant、value，  service里面也可以注入constant/value,factory
+	3.factory返回一个带有属性，带有方法的对象。
+	4.factory/service都是单例存在的，即数据在控制器间是同步共享的
+
+
+	不同点
+	1.factory直接返回一个普通对象，通过该对象访问其属性和方法，该对象在多个控制器间是共享的（也叫单例）
+	2.service更像是通过new Object()构造器创建的对象，不需要返回，直接通过注入来使用该对象，
+
+	provider: 需要提供一个$get的方法
+
+	****************************/
+
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Examples</title>
+
+
+<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body ng-app="home">
+
+<div class="container" ng-controller="cart">
+	<p class="text text-primary" ng-show="!cart.length">
+		购物车为空
+	</p>
+	<table class="table table-striped" ng-show="cart.length">
+		<thead>
+			<tr>
+				<td>产品编号</td>
+				<td>商品名称</td>
+				<td>数量</td>
+				<td>单价</td>
+				<td>总价</td>
+				<td>操作</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in cart">
+				<td ng-bind="item.id"></td>
+				<td ng-bind="item.name"></td>
+				<td>
+					<button class="btn btn-primary" ng-click="reduce(item.id)"><span class="glyphicon glyphicon-chevron-left"></span></button>
+					<input type="text" ng-model="item.quantity">
+					<button class="btn btn-primary" ng-click="increase(item.id)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+				</td>
+				<td ng-bind="item.price"></td>
+				<td ng-bind="item.price*item.quantity"></td>
+				<td><button class="btn btn-danger" ng-click="remove(item.id)">删除</button></td>
+			</tr>
+			<tr>
+				<td>总价</td>
+				<td ng-bind="totalPrice"></td>
+				<td>数量合计</td>
+				<td ng-bind="totalAmount"></td>
+				<td><button class="btn btn-danger" ng-click="cart={}">清空购物车<span class="glyphicon glyphicon-remove"></span></button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<script src='js/angular.js'></script>
+<script>
+angular.module('home', [])
+	.controller('cart', function($scope){
+		$scope.cart = [
+			{
+				id: "10003",
+				name: "苹果5s",
+				quantity: 4,
+				price : 4900
+			},
+			{
+				id: "20003",
+				name: "iPhone X",
+				quantity: 3,
+				price : 9999
+			},
+			{
+				id: "30003",
+				name: "iPhone 8 Plus",
+				quantity: 4,
+				price : 7777
+			},
+			{
+				id: "40003",
+				name: "iMac book",
+				quantity: 6,
+				price : 12000
+			}
+		];
+
+		var sum = function(){
+			$scope.totalPrice = 0;
+			var tprice = 0;
+			var tamount = 0;
+			angular.forEach($scope.cart, function(item){
+				tprice += item.quantity * item.price;
+				tamount += item.quantity;
+			});
+			$scope.totalPrice = tprice;
+			$scope.totalAmount = tamount;
+		}
+		sum();
+
+		$scope.remove = function(id){
+			angular.forEach($scope.cart, function(item, key){
+				if(item.id === id){
+					$scope.cart.splice(key,1);
+					sum();
+				}
+			})
+		}
+
+		$scope.reduce = function(id){
+			angular.forEach($scope.cart, function(item){
+				if(item.id === id){
+					if(item.quantity != 0){
+						item.quantity --;
+					}
+					sum();
+				}
+			})
+		}
+
+		$scope.increase = function(id){
+			angular.forEach($scope.cart, function(item){
+				if(item.id === id){
+					if(item.quantity != 0){
+						item.quantity ++;
+					}
+					sum();
+				}
+			})
+		}
+
+	})
+
+</script>
+</body>
+</html>

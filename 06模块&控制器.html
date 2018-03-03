@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Examples</title>
+
+</head>
+<body ng-app="Demo">
+    <div class="container" ng-controller="HomePage">
+    	<input type="text" ng-model="name">
+    	<span ng-bind="name"></span>
+    </div>
+<script src="js/angular.js"></script>
+<script>
+/*************************
+	1.controller两种传参方式都可以使用，第一种指定注入序列后，function内必须保持一致
+*/
+	angular.module('Demo',[])
+
+		.controller('HomePage', ['$scope',"$log",function($scope, $http,$log){
+			$scope.name = "wade";
+			console.log($http.log("this..."));
+		}])
+		.controller("TestSerivce",function($scope, $http, $timeout, $location, $interval, $window, $document,$locationProvider){
+			console.log($location.path());
+
+
+		})
+		.controller("TestService2", function($scope, $sce, $http){
+			// $sce 安全服务
+			$scope.headHtml = "<h1>标题一</h1>";
+
+			$scope.head = $sce.trustAsHtml($scope.headHtml);
+
+			// $http服务参数
+			$http({
+				url: "http://www.baidu.com/w=?",
+				method:"get",// post		// put
+				params: []	 // data
+			}).then(
+				function success(resp){
+
+				},
+				function error(resp){
+
+				}
+			);
+
+			$http.get("url",{params:""},{}).then(
+				function(resp){
+
+				},
+				function(resp){
+
+				});
+
+		})
+		.controller("Test3", funtion($cookies, $animate, ){
+
+		})
+</script>
+</body>
+</html>

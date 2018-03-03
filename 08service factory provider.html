@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Examples</title>
+
+</head>
+<body ng-app="myApp">
+<div class="container" ng-controller="FirstController">
+	
+</div>
+<div class="container" ng-controller="SecondController">
+	
+</div>
+
+<script src="js/angular.js"></script>
+<script>
+	var app = angular.module("myApp",[]);
+	
+	// 第一种定义方法
+	// 和第二种方法重复的定义，第一种方法优先级更高
+	app.config(function($provide){
+		$provide.constant("SESSIONID", 900001);
+	});
+	app.config(function($provide){
+		$provide.value("logName","iiimix");
+	});
+
+	app.controller("SecondController", function($scope, SESSIONID, logName){
+		console.log(SESSIONID); // 900001
+		console.log(logName);
+	});
+
+
+	// 第二种定义方法
+	// Constant 定义常量
+	app.constant("MATH_PI", Math.PI);
+
+	// 定义value
+	app.value("Timeout", 60);
+	app.value("Dict", {"city":{'BJ':'北京','SH':'上海','GZ':'广州','SZ':'深圳'},'area':{'BJ':['朝阳','西城','海淀','东城']}});
+
+	app.controller("FirstController", function($scope, MATH_PI, Timeout, Dict){
+		console.log(MATH_PI); // 3.1415926..
+		console.log(Timeout); // 60
+		console.log(Dict);	  // {city:....}
+	});
+
+	
+
+</script>
+</body>
+</html>

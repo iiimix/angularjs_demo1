@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>$provider对象</title>
+
+</head>
+<body ng-app="cms">
+    <div class="container" ng-controller="FirstController">
+    	<p class="text text-primary">
+    		{{content}}
+    	</p>
+    	<p ng-bind="content"></p>
+    </div>
+
+
+<script src="js/angular.min.js"></script>
+<script type="text/javascript">
+	angular.module("cms",[], function($provide){
+		console.log("cms start up....");
+		$provide.provider("CustomService", function(){
+
+			this.$get = function(){
+				return {
+					message : "this message is from ustomeService"
+				}
+			}
+		});
+
+	})
+	.controller("FirstController", function($scope, CustomService){
+		$scope.content = "成功了";
+		console.log("content is rendering");
+
+		console.log(CustomService);
+
+	})
+</script> 
+</body>
+</html>

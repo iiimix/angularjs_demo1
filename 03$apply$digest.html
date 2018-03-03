@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>$apply</title>
+<link rel="stylesheet" href="css/bootstrap.css">
+<style>
+	input{
+		font:32px/40px "微软雅黑";
+		color:red;
+		height:40px;
+		width:400px;
+	}
+
+	p{
+		font:32px/40px "微软雅黑";
+		width:800px;
+		height:200px;
+		background:#cdcdcd;
+	}
+</style>
+</head>
+<body ng-app="testApply">
+	<div class="container">
+		<div ng-controller="index" style="width:800px;margin:50px auto">
+			<input ng-model="date" value="">
+			<p ng-bind="date"></p>
+			<input ng-model="date1" value="">
+			<p ng-bind="date1"></p>
+	<div>
+	</div>
+
+<script src='js/angular.min.js'></script>
+<script>
+/********************************************************************************
+ 
+ $apply数据变化，触发angular值检查，更新页面绑定属性
+
+ */
+angular.module('testApply', [])
+	.controller('index', function($scope, $interval){
+		$scope.date = new Date().toLocaleTimeString();
+
+		// 使用$apply方法触发脏检查机制
+		setInterval(function(){
+			$scope.date = new Date().toLocaleTimeString();
+			$scope.$apply();
+		}, 1000);
+
+		// $apply源码中通过调用$digest执行变量值检查，
+		// 但是不建议程序中直接调用$digest，源码中有检查参数是否有效，$eval()方法检验，出现异常则交给$exceptionHandler处理
+		// 并做了异常处理，校验成功则执行$digest
+
+		// 使用内置$interval指令实现
+		var interval = $interval(function(){
+			$scope.date1 = new Date().toLocaleString();
+			// 无须手动调用$apply方法
+			//$scope.$apply($scope.date);
+		}, 1000);
+		
+	});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Examples</title>
+
+<link rel="stylesheet" href="css/bootstrap.css">
+<style>
+	body{
+		height:2000px;
+	}
+
+	.alert{
+		height:50px;
+		
+		/*transition:all 2s ease;
+		-webkit-transition:all 2s ease;*/
+		
+		transition:height 2s ease ,opacity 2s ease;
+		-webkit-transition:height 2s ease ,opacity 2s ease;
+		
+	}
+
+	.full-height{
+		height:400px;
+		opacity: 0.5;
+	}
+	
+</style>
+</head>
+<body ng-app="myFilter">
+
+<nav class="navbar navbar-default">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainMenu">
+				<span class="sr-only">辅助设备识别</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="#" class="navbar-brand">首页</a>
+		</div>
+		<div class="navbar-collapse collapse" id="mainMenu">
+			<ul class="navbar-nav nav">
+				<li><a href="#">精品视频</a></li>
+				<li class="active"><a href="#">实战项目</a></li>
+				<li><a href="#">精彩分享</a></li>
+				<li class="dropdown">
+					<a href="" class="dropdown-toggle" data-toggle="dropdown">下列菜单
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="#">php项目</a></li>
+						<li><a href="#">Java项目</a></li>
+						<li class="divider" role="seprator"></li>
+						<li class="active"><a href="#">Html项目</a></li>
+						<li><a href="#">Javascript项目</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<div class="container" ng-controller="FirstController">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					filter过滤器的使用
+				</div>
+				<div class="panel-body">
+					<p>
+					today| date默认显示
+					{{today| date}}
+					</p>
+					<p>
+					<div class="input-group">
+						<span class="input-group-addon">&nbsp;&nbsp;&nbsp;&nbsp;date:'y-MM-d'</span>
+						<input style="padding-left:20px" type="text" value="{{today| date:'y-MM-d'}}">
+					</div>
+					</p>
+					<div class="input-group">
+						<span class="input-group-addon">date:'HH:mm:ss'</span>
+						<input style="padding-left:20px" type="text" value="{{today| date:'HH:mm:ss'}}">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div ng-class="{'full-height': isHover == true}" ng-mouseleave="isHover=false" ng-mouseover="isHover=true" class="alert alert-info">
+			有兴趣的童鞋请移步到本人博客
+			地址：<a href="#" class="alert-link">www.iiimix.cn</a>
+		</div>
+	</div>
+</div>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/angular.js"></script>    
+<script>
+	// $(".alert").hover(function(){
+	// 	$(this).addClass("full-height");
+	// },function(){
+	// 	$(this).removeClass("full-height");
+	// })
+	angular.module('myFilter',[])
+		.controller('FirstController', function($scope){
+			$scope.today = new Date();
+		})
+	
+
+
+	var data = [{'examinee':{'area':{id:72, name:"一院",score:20}}},{'examinee':{'area':{id:22, name:"二院",score:10}}},
+	{'examinee':{'area':{id:72, name:"一院",score:30}}}];
+
+var item,id,score;
+var map = {};
+for(i in data){
+	item = data[i];
+	id = item.examinee.area.id+"";
+	score = item.examinee.area.score;
+	console.log(map[id]);
+	if(!map[id]){
+		map[id] = {};
+		map[id].count = 1;
+		map[id].scores = score;
+		map[id].average = score;
+		map[id].max = score;
+		map[id].min = score;
+		// 需要名称可以再加名称
+
+	}else {
+		map[id].count ++;
+		map[id].scores += score;
+		map[id].average = map[id].scores/(1.0*map[id].count);
+		map[id].max = score > map[id].max ? score :map[id].max;
+		map[id].min = score < map[id].min ? score :map[id].min;
+	}
+}
+
+console.log(map);
+</script>
+
+</body>
+</html>
